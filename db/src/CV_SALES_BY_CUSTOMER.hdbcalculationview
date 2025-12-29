@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_SALES_BY_CUSTOMER" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" mdsCubeConversionExecution="AT_LOADING_TIME">
+<descriptions defaultDescription="CV_SALES_BY_CUSTOMER"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="SALES_ORDER">
+    <resourceUri>SALES_ORDER</resourceUri>
+  </DataSource>
+  <DataSource id="CUSTOMER">
+    <resourceUri>CUSTOMER</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="PROJ_SALES">
+    <viewAttributes>
+      <viewAttribute id="SALES_ID"/>
+      <viewAttribute id="CUSTOMER_ID"/>
+      <viewAttribute id="AMOUNT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="SALES_ORDER"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="PROJ_CUSTOMER">
+    <viewAttributes>
+      <viewAttribute id="CUSTOMER_ID"/>
+      <viewAttribute id="CUSTOMER_NAME"/>
+      <viewAttribute id="REGION"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CUSTOMER"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="JOIN_SALES_CUSTOMER" cardinality="CN_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="CUSTOMER_ID" aggregationType="sum"/>
+      <viewAttribute id="AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="CUSTOMER_NAME"/>
+      <viewAttribute id="REGION"/>
+      <viewAttribute hidden="true" id="JOIN$CUSTOMER_ID$CUSTOMER_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="PROJ_SALES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMER_ID" source="CUSTOMER_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AMOUNT" source="AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUSTOMER_ID$CUSTOMER_ID" source="CUSTOMER_ID"/>
+    </input>
+    <input node="PROJ_CUSTOMER">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMER_NAME" source="CUSTOMER_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REGION" source="REGION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUSTOMER_ID$CUSTOMER_ID" source="CUSTOMER_ID"/>
+    </input>
+    <joinAttribute name="JOIN$CUSTOMER_ID$CUSTOMER_ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="JOIN_SALES_CUSTOMER">
+  <attributes>
+    <attribute id="CUSTOMER_NAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOMER_NAME"/>
+      <keyMapping columnObjectName="JOIN_SALES_CUSTOMER" columnName="CUSTOMER_NAME"/>
+    </attribute>
+    <attribute id="REGION" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REGION"/>
+      <keyMapping columnObjectName="JOIN_SALES_CUSTOMER" columnName="REGION"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="CUSTOMER_ID" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CUSTOMER_ID"/>
+      <measureMapping columnObjectName="JOIN_SALES_CUSTOMER" columnName="CUSTOMER_ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="AMOUNT" order="4" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="TOTAL_SALES"/>
+      <measureMapping columnObjectName="JOIN_SALES_CUSTOMER" columnName="AMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="222.38992490802693" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="PROJ_SALES" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="91.99999999999994" y="376.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="PROJ_CUSTOMER" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="376.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="JOIN_SALES_CUSTOMER" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="197.38992490802696" y="217"/>
+      <rectangleSize height="30" width="210"/>
+    </shape>
+    <shape modelObjectName="PROJ_SALES" modelObjectNameSpace="JOIN_SALES_CUSTOMER" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="185.86279296875"/>
+    </shape>
+    <shape modelObjectName="PROJ_CUSTOMER" modelObjectNameSpace="JOIN_SALES_CUSTOMER" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="206.6435546875"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

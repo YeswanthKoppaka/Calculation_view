@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "imports": [
+    {
+      "target_table": "CUSTOMER",
+      "source_data": {
+        "data_type": "CSV",
+        "file_name": "Customer.data.csv",
+        "has_header": true
+      }
+    }
+  ]
+}

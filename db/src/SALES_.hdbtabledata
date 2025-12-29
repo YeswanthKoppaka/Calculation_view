@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "imports": [
+    {
+      "target_table": "SALES_ORDER",
+      "source_data": {
+        "data_type": "CSV",
+        "file_name": "SalesOrder.data.csv",
+        "has_header": true
+      }
+    }
+  ]
+}

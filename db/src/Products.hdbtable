@@ -1,0 +1,7 @@
+COLUMN TABLE "Products" (
+    "ID" INTEGER NOT NULL,
+    "NAME" NVARCHAR(50),
+    "PRICE" DECIMAL(10,2),
+    PRIMARY KEY ("ID")
+)
+
